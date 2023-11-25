@@ -1,5 +1,13 @@
-import Produto from "./Models/produtoModel.js";
+import express from 'express';
+import routeDialogFlow from './Routes/dialogFlowRoute.js';
 
-let produto = new Produto(1, "Mouse", "Sem Fio", "Hyperx", 100, "https://images.kabum.com.br/produtos/fotos/105010/mouse-sem-fio-gamer-hyperx-pulsefire-dart-rgb-16000dpi-hx-mc006b-_mouse-sem-fio-gamer-hyperx-pulsefire-dart-rgb-16000dpi-hx-mc006b-_1571411835_gg.jpg");
+const host = '0.0.0.0';
+const porta = 3500;
 
-console.log(produto.toJSON());
+const app = express();
+app.use(express.json());
+app.use('/dialogflow', routeDialogFlow);
+
+app.listen(porta, host, () => {
+    console.log(`Servidor rodando em http://${host}:${porta}`);
+})

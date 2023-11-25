@@ -1,4 +1,6 @@
-export default class Produto{
+import PerifericosDAO from "../Persistence/perifericosDAO.js"
+
+export default class Perifericos{
 
     #codigo
     #categoria
@@ -43,5 +45,25 @@ export default class Produto{
             'valor': this.#valor,
             'urlImagem': this.#urlImagem
         }
+    }
+
+    async gravar(){
+        const perifericosDAO = new PerifericosDAO();
+        await perifericosDAO.gravar(this);
+    }
+
+    async atualizar(){
+        const perifericosDAO = new PerifericosDAO();
+        await perifericosDAO.atualizar(this);
+    }
+
+    async excluir(){
+        const perifericosDAO = new PerifericosDAO();
+        await perifericosDAO.excluir(this);
+    }
+
+    async consultar(){
+        const perifericosDAO = new PerifericosDAO();
+        return await perifericosDAO.consultar();
     }
 }
