@@ -14,7 +14,7 @@ export default class PedidoDAO{
                 const [registros] = await conexao.execute(sql, ['%' + item.tb_perifericos + '%']);
                 item.codigo = registros[0].codigo;
                 sql = `
-                    INSERT INTO pedido_perifericos(fk_id_pedido, fk_codigo_tb_perifericos, qtd)
+                    INSERT INTO pedido_perifericos(fk_id_pedido, fk_codigo_periferico, qtd)
                     VALUES (?,?,?);
                 `
                 parametros = [pedido.id, item.codigo, item.qtd];

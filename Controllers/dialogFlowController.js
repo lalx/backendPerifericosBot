@@ -9,7 +9,7 @@ export default class DialogFlowController {
             const intencao = req.body.queryResult.intent.displayName;
 
             const origem = req.body?.originalDetectIntentRequest?.source;
-            if (intencao === 'IntencaoUsuario') {
+            if (intencao === 'intencao-usuario') {
                 if (origem) {
                     obterCardPerifericos('custom').then((listaCards) => {
                         let respostaDF = {
@@ -92,7 +92,7 @@ export default class DialogFlowController {
                     })
                 }
             }
-            else if (intencao === "RegistroLocalEntrega") {
+            else if (intencao === "pedido-finalizado") {
                 let perifericos = [];
                 let qtds = [];
                 for (const contexto of requisicao.body.queryResult.outputContexts) {
@@ -102,7 +102,7 @@ export default class DialogFlowController {
                     }
                 }
 
-                const dataHoje = new Date().toLocaleDateString(); //"01/01/2023"
+                const dataHoje = new Date().toLocaleDateString();
                 let itensPedido = [];
                 for (let i = 0; i < perifericos.length; i++) {
 
@@ -119,7 +119,7 @@ export default class DialogFlowController {
                 `;
                 const pedido = new Pedido(0, dataHoje, itensPedido);
                 pedido.gravar().then(() => {
-                    if (origem) { //mensagem para ambientes custom
+                    if (origem) {
                         let respostaDF = {
                             "fulfillmentMessages": [{
                                 "text": {
@@ -134,7 +134,7 @@ export default class DialogFlowController {
                         }
                         resposta.json(respostaDF);
                     }
-                    else { //messenger
+                    else {
                         let respostaDF = {
                             "fulfillmentMessages": []
                         }
@@ -155,7 +155,7 @@ export default class DialogFlowController {
                     }
                 })
                     .catch((erro) => {
-                        if (origem) { //mensagem para ambientes custom
+                        if (origem) {
                             let respostaDF = {
                                 "fulfillmentMessages": [{
                                     "text": {
@@ -170,7 +170,7 @@ export default class DialogFlowController {
                             }
                             resposta.json(respostaDF);
                         }
-                        else { //messenger
+                        else {
                             let respostaDF = {
                                 "fulfillmentMessages": []
                             }
