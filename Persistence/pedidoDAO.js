@@ -11,7 +11,7 @@ export default class PedidoDAO{
             pedido.id = resultado[0].insertId;
             for (const item of pedido.itensPedidos){
                 sql = `SELECT codigo FROM tb_perifericos WHERE categoria like ?`;
-                const [registros] = await conexao.execute(sql, ['%' + item.tb_perifericos + '%']);
+                const [registros] = await conexao.execute(sql, ['%' + item.categoria + '%']);
                 item.codigo = registros[0].codigo;
                 sql = `
                     INSERT INTO pedido_perifericos(fk_id_pedido, fk_codigo_periferico, qtd)

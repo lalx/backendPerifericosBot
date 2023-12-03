@@ -12,10 +12,10 @@ export default class DialogFlowController {
             if (intencao === 'intencao-usuario') {
                 if (origem) {
                     obterCardPerifericos('custom').then((listaCards) => {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": []
                         }
-                        respostaDF.fulfillmentMessages.push({
+                        resDF.fulfillmentMessages.push({
                             "text": {
                                 "text": [
                                     "Bem vindo à Periféricos Gamer! \n",
@@ -23,17 +23,17 @@ export default class DialogFlowController {
                                 ]
                             }
                         });
-                        respostaDF.fulfillmentMessages.push(...listaCards);
-                        respostaDF.fulfillmentMessages.push({
+                        resDF.fulfillmentMessages.push(...listaCards);
+                        resDF.fulfillmentMessages.push({
                             "text": {
                                 "text": [
                                     "Qual produto você deseja?"
                                 ]
                             }
                         })
-                        res.json(respostaDF);
+                        res.json(resDF);
                     }).catch((erro) => {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": [{
                                 "text": {
                                     "text": [
@@ -44,16 +44,16 @@ export default class DialogFlowController {
                                 }
                             }]
                         }
-                        res.json(respostaDF);
+                        res.json(resDF);
                     })
 
                 }
                 else {
                     obterCardPerifericos('messenger').then((listaCards) => {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": []
                         }
-                        respostaDF.fulfillmentMessages.push({
+                        resDF.fulfillmentMessages.push({
                             "payload": {
                                 "richContent": [[{
                                     "type": "description",
@@ -65,18 +65,18 @@ export default class DialogFlowController {
                                 }]]
                             }
                         });
-                        respostaDF.fulfillmentMessages[0].payload.richContent[0].push(...listaCards);
-                        respostaDF.fulfillmentMessages[0].payload.richContent[0].push({
+                        resDF.fulfillmentMessages[0].payload.richContent[0].push(...listaCards);
+                        resDF.fulfillmentMessages[0].payload.richContent[0].push({
                             "type": "description",
                             "title": "Qual produto você deseja?",
                             "text": []
                         });
-                        res.json(respostaDF);
+                        res.json(resDF);
                     }).catch((erro) => {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": []
                         }
-                        respostaDF.fulfillmentMessages.push({
+                        resDF.fulfillmentMessages.push({
                             "payload": {
                                 "richContent": [[{
                                     "type": "description",
@@ -95,9 +95,9 @@ export default class DialogFlowController {
             else if (intencao === "pedido-finalizado") {
                 let perifericos = [];
                 let qtds = [];
-                for (const contexto of requisicao.body.queryResult.outputContexts) {
-                    if (contexto.parameters.periferico) {
-                        perifericos = contexto.parameters.periferico;
+                for (const contexto of req.body.queryResult.outputContexts) {
+                    if (contexto.parameters.categoria) {
+                        perifericos = contexto.parameters.categoria;
                         qtds = contexto.parameters.number;
                     }
                 }
@@ -108,19 +108,19 @@ export default class DialogFlowController {
 
                     itensPedido.push({
                         "codigo":0,
-                        "periferico": perifericos[i],
+                        "categoria": perifericos[i],
                         "qtd": qtds[i]
                     });
 
                 }
-                const enderecoEntrega = `Rua: ${requisicao.body.queryResult.parameters.location['street-address']} \n
-                Cidade: ${requisicao.body.queryResult.parameters.location.city} / 
-                ${requisicao.body.queryResult.parameters.location["admin-area"]} \n
+                const enderecoEntrega = `Rua: ${req.body.queryResult.parameters.location['street-address']} \n
+                Cidade: ${req.body.queryResult.parameters.location.city} / 
+                ${req.body.queryResult.parameters.location["admin-area"]} \n
                 `;
                 const pedido = new Pedido(0, dataHoje, itensPedido);
                 pedido.gravar().then(() => {
                     if (origem) {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": [{
                                 "text": {
                                     "text": [
@@ -132,13 +132,13 @@ export default class DialogFlowController {
                                 }
                             }]
                         }
-                        resposta.json(respostaDF);
+                        res.json(resDF);
                     }
                     else {
-                        let respostaDF = {
+                        let resDF = {
                             "fulfillmentMessages": []
                         }
-                        respostaDF.fulfillmentMessages.push({
+                        resDF.fulfillmentMessages.push({
                             "payload": {
                                 "richContent": [[{
                                     "type": "description",
@@ -151,12 +151,12 @@ export default class DialogFlowController {
                                 }]]
                             }
                         });
-                        resposta.json(respostaDF);
+                        res.json(resDF);
                     }
                 })
                     .catch((erro) => {
                         if (origem) {
-                            let respostaDF = {
+                            let resDF = {
                                 "fulfillmentMessages": [{
                                     "text": {
                                         "text": [
@@ -168,13 +168,13 @@ export default class DialogFlowController {
                                     }
                                 }]
                             }
-                            resposta.json(respostaDF);
+                            res.json(resDF);
                         }
                         else {
-                            let respostaDF = {
+                            let resDF = {
                                 "fulfillmentMessages": []
                             }
-                            respostaDF.fulfillmentMessages.push({
+                            resDF.fulfillmentMessages.push({
                                 "payload": {
                                     "richContent": [[{
                                         "type": "description",
