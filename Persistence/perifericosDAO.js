@@ -34,17 +34,23 @@ export default class PerifericosDAO{
         }
     }
 
-    async consultar(){
-        const sql = 'SELECT * FROM tb_perifericos';
+    async consultar(pesquisa){
+        let sql = "";
+        if (pesquisa){
+            sql = `SELECT * FROM tb_perifericos WHERE categoria LIKE '%${pesquisa}%'`;
+        }
+        else{
+         sql =`SELECT * FROM tb_perifericos`;
+        }
         const conexao = await conectar();
         const [registros, campos] = await conexao.execute(sql);
         let listaPerifericos = [];
-        
-        for(const registro of registros){
+        for (const registro of registros){
             const periferico = new Perifericos(registro.codigo, registro.categoria, registro.modelo, registro.marca, registro.valor, registro.urlImagem);
             listaPerifericos.push(periferico);
         }
         global.poolConexoes.releaseConnection(conexao);
         return listaPerifericos;
     }
+
 }

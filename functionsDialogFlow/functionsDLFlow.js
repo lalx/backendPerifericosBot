@@ -63,3 +63,4 @@ export async function obterCardPerifericos(tipoCard = 'custom'){
     }
     return listaCards;
 }
+

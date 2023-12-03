@@ -62,8 +62,8 @@ export default class Perifericos{
         await perifericosDAO.excluir(this);
     }
 
-    async consultar(){
+    async consultar(pesquisa){
         const perifericosDAO = new PerifericosDAO();
-        return await perifericosDAO.consultar();
+        return await perifericosDAO.consultar(pesquisa);
     }
 }
